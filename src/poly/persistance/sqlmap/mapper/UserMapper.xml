@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.UserMapper">
+
+
+
+	<insert id="userJoin" parameterType="UserDTO">
+		INSERT INTO USER_INFO
+		(
+		USER_ID, USER_NAME, PASSWORD, EMAIL1, EMAIL2, TEL_1, TEL_2, TEL_3,
+		BIRTHDAY
+		)
+		VALUES
+		(
+		#{user_id}, #{user_name}, #{password}, #{email1}, #{email2},
+		#{tel_1}, #{tel_2}, #{tel_3}, #{birthday}
+		)
+	</insert>
+
+	<select id="userLogin" parameterType="UserDTO" resultType="String">
+		SELECT
+		USER_NO
+		FROM
+		USER_INFO
+		WHERE
+		USER_ID=#{user_id} AND PASSWORD=#{password}
+	</select>
+
+	<select id="userIdsearch" parameterType="UserDTO" resultType="String">
+		SELECT
+		USER_ID
+		FROM
+		USER_INFO
+		WHERE
+		USER_NAME = #{user_name} AND EMAIL1 = #{email1} AND EMAIL2 = #{email2}
+	</select>
+
+	<select id="userPwsearch" parameterType="UserDTO" resultType="String">
+		SELECT
+		USER_ID
+		FROM
+		USER_INFO
+		WHERE
+		USER_NAME =#{user_name} AND EMAIL1 =#{email1} AND EMAIL2 =#{email2} AND
+		USER_ID =#{user_id} AND TEL_1 =#{tel_1} AND TEL_2 =#{tel_2} AND TEL_3 =#{tel_3}
+	</select>
+
+	<update id="updatePw" parameterType="UserDTO">
+		UPDATE USER_INFO SET
+		PASSWORD =#{password}
+		WHERE
+		USER_ID =#{user_id}
+
+	</update>
+	
+	<update id="updateId" parameterType="UserDTO">
+		UPDATE USER_INFO SET
+		USER_ID =#{user_id}
+		WHERE
+		USER_NO =#{user_no}
+
+	</update>
+	
+	<update id="updateemail" parameterType="UserDTO">
+		UPDATE USER_INFO SET
+		Email1=#{email1},Email2=#{email2}
+		WHERE
+		USER_NO =#{user_no}
+
+	</update>
+	
+	<select id="getUserList" resultType="UserDTO">
+		SELECT
+		USER_NO, USER_ID, USER_NAME, TEL_1, TEL_2, TEL_3
+		FROM
+		USER_INFO
+	</select>
+	
+	   <!-- 게시판 상세보기 쿼리 -->
+   <select id="getUserInfo" resultType="UserDTO">
+	SELECT
+	USER_NO, USER_ID, USER_NAME, PASSWORD, EMAIL1, EMAIL2, TEL_1, TEL_2, TEL_3,
+	BIRTHDAY
+	FROM USER_INFO
+	WHERE USER_NO = #{user_no}
+   </select>
+   
+
+   <!-- 게시판 수정 쿼리 -->
+   <update id="updateUserInfo" parameterType="UserDTO">
+      UPDATE USER_INFO SET
+         USER_NAME = #{user_name}, PASSWORD = #{password}, EMAIL1 = #{email1}, EMAIL2 = #{email2},
+          TEL_1 = #{tel_1}, TEL_2 = #{tel_2}, TEL_3 = #{tel_3}, BIRTHDAY = #{birthday}
+      WHERE
+         USER_NO = #{user_no}   
+         
+   </update>
+
+   <!-- 게시판 삭제 쿼리 -->
+   <delete id="deleteUserInfo" parameterType="UserDTO">
+      DELETE FROM USER_INFO
+      WHERE USER_NO = #{user_no}   
+   </delete>
+   
+   <select id="getidover" parameterType="UserDTO" resultType="String">
+	SELECT
+	USER_NO
+	FROM
+	USER_INFO
+	WHERE
+	USER_ID =#{user_id}
+   </select>
+   
+   <select id="getemailover" parameterType="UserDTO" resultType="String">
+	SELECT
+	USER_NO
+	FROM
+	USER_INFO
+	WHERE
+	Email1 =#{email1} AND Email2=#{email2}
+   </select>
+   
+   <select id="getUserid" resultType="String">
+		SELECT USER_ID FROM USER_INFO
+		WHERE USER_NO = #{user_no}
+	</select>
+</mapper>

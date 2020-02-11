@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+ 
+<tiles-definitions>
+ 
+    <!-- 메뉴 존재 -->
+    <definition name="base" template="/WEB-INF/tiles/basic/template.jsp">
+        <put-attribute name="left"   value="/WEB-INF/tiles/basic/left.jsp" />
+        <put-attribute name="header" value="/WEB-INF/tiles/basic/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/tiles/basic/footer.jsp" />
+    </definition>
+ 
+    <definition name="*.page" extends="base">
+        <put-attribute name="body" value="/WEB-INF/view/{1}.jsp" />
+    </definition>
+ 
+     <definition name="*/*.page" extends="base">
+         <put-attribute name="body" value="/WEB-INF/view/{1}/{2}.jsp" />
+     </definition>
+    
+    <definition name="*/*/*.page" extends="base">
+        <put-attribute name="body" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
+    </definition>
+    
+    <!-- 아무것도 없는거 -->
+    <definition name="baseEmpty" template="/WEB-INF/tiles/empty/template.jsp">
+    </definition>
+    
+    <definition name="*.part" extends="baseEmpty">
+        <put-attribute name="body" value="/WEB-INF/view/{1}.jsp" />
+    </definition>
+ 
+     <definition name="*/*.part" extends="baseEmpty">
+         <put-attribute name="body" value="/WEB-INF/view/{1}/{2}.jsp" />
+     </definition>
+    
+    <definition name="*/*/*.part" extends="baseEmpty">
+        <put-attribute name="body" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
+    </definition>        
+</tiles-definitions>

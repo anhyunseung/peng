@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.NoticeMapper">
+
+	<!-- 게시판 리스트 쿼리 -->
+	<select id="getNoticeList" resultType="NoticeDTO">
+		SELECT N.NOTICE_SEQ, N.TITLE, N.CONTENTS, U.USER_NAME, N.USER_ID,
+		N.REG_DT ,
+		(SELECT COUNT(*) FROM COMMENT_NOTICE WHERE NOTICE_SEQ=N.NOTICE_SEQ) COM_COUNT
+		FROM NOTICE_INFO N, USER_INFO U
+		WHERE N.USER_ID = U.USER_ID
+		ORDER BY N.NOTICE_SEQ DESC
+	</select>
+	
+	<select id="getNoticeSearch" resultType="NoticeDTO">
+		SELECT N.NOTICE_SEQ, N.TITLE, N.CONTENTS, U.USER_NAME, N.USER_ID,
+		N.REG_DT ,
+		(SELECT COUNT(*) FROM COMMENT_NOTICE WHERE NOTICE_SEQ=N.NOTICE_SEQ) COM_COUNT
+		FROM NOTICE_INFO N, USER_INFO U
+		WHERE N.USER_ID = U.USER_ID AND (N.TITLE LIKE #{search} OR N.CONTENTS LIKE #{search})
+		ORDER BY N.NOTICE_SEQ DESC
+	</select>
+
+	<!-- 게시판 등록 쿼리 -->
+	<insert id="InsertNoticeInfo" parameterType="NoticeDTO">
+		INSERT INTO NOTICE_INFO
+		(
+		TITLE, CONTENTS, USER_ID,
+		REG_USER_NO, REG_DT
+		)
+		VALUES(
+		#{title}, #{contents}, #{user_id}, #{reg_user_no}, NOW()
+		)
+	</insert>
+
+	<!-- 게시판 상세보기 쿼리 -->
+	<select id="getNoticeInfo" resultType="NoticeDTO">
+		SELECT N.NOTICE_SEQ, N.TITLE, U.USER_NAME, N.USER_ID,
+		CONTENTS, N.REG_DT
+		FROM NOTICE_INFO N, USER_INFO U
+		WHERE N.USER_ID = U.USER_ID
+		AND N.NOTICE_SEQ = #{notice_seq}
+	</select>
+
+
+	<!-- 게시판 수정 쿼리 -->
+	<update id="updateNoticeInfo" parameterType="NoticeDTO">
+		UPDATE NOTICE_INFO SET
+		TITLE = #{title},
+		CONTENTS = #{contents},
+		CHG_USER_NO = #{chg_user_no},
+		CHG_DT = NOW()
+		WHERE
+		NOTICE_SEQ = #{notice_seq}
+
+	</update>
+
+	<!-- 게시판 삭제 쿼리 -->
+	<delete id="deleteNoticeInfo" parameterType="NoticeDTO">
+		DELETE FROM NOTICE_INFO
+		WHERE NOTICE_SEQ = #{notice_seq}
+	</delete>
+
+
+	<insert id="insertComment" parameterType="Comment_noticeDTO">
+		INSERT INTO
+		COMMENT_NOTICE
+		(
+		CONTENTS, REG_USER_NO, NOTICE_SEQ, USER_ID, REG_DT
+		)
+		VALUES
+		(
+		 #{contents}, #{reg_user_no}, #{notice_seq}, #{user_id}, NOW()
+		)
+	</insert>
+	
+	<delete id="deleteComment" parameterType="Comment_noticeDTO">
+		DELETE FROM COMMENT_NOTICE
+		WHERE COM_SEQ = #{com_seq}
+	</delete>
+	
+	<update id="updateComment" parameterType="Comment_noticeDTO">
+		UPDATE COMMENT_NOTICE SET
+		CONTENTS = #{contents},
+		CHG_USER_NO = #{chg_user_no},
+		CHG_DT = NOW()
+		WHERE
+		COM_SEQ = #{com_seq}
+	</update>
+
+	<select id="getComment" resultType="Comment_noticeDTO" parameterType="NoticeDTO">
+		SELECT NOTICE_SEQ, COM_SEQ, CONTENTS, REG_USER_NO, REG_DT, USER_ID
+		FROM COMMENT_NOTICE WHERE NOTICE_SEQ = #{notice_seq} ORDER BY COM_SEQ ASC
+	</select>
+	
+	<delete id="deleteCommentALL" parameterType="String">
+		DELETE FROM COMMENT_NOTICE
+		WHERE NOTICE_SEQ = #{notice_seq}
+	</delete>
+	
+	<select id="getCommentUserid" resultType="String">
+		SELECT USER_ID FROM COMMENT_NOTICE 
+		WHERE COM_SEQ = #{com_seq}
+	</select>
+	
+	<select id="getNoticeUserid" resultType="String">
+		SELECT USER_ID FROM NOTICE_INFO
+		WHERE NOTICE_SEQ = #{notice_seq}
+	</select>
+</mapper>

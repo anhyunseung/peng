@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+       <!-- 사용할 DTO 등록  -->
+      <typeAlias type="poly.dto.BBMDTO" alias="BBMDTO"/>
+      <typeAlias type="poly.dto.Comment_bbmDTO" alias="Comment_bbmDTO"/>
+      <typeAlias type="poly.dto.Comment_noticeDTO" alias="Comment_noticeDTO"/>
+      <typeAlias type="poly.dto.Comment_inqDTO" alias="Comment_inqDTO"/>
+      <typeAlias type="poly.dto.CommonDTO" alias="CommonDTO"/>
+      <typeAlias type="poly.dto.NoticeDTO" alias="NoticeDTO"/>
+      <typeAlias type="poly.dto.UserDTO" alias="UserDTO"/> 
+      <typeAlias type="poly.dto.InquiryDTO" alias="InquiryDTO"/>
+   
+
+    </typeAliases>
+</configuration>
