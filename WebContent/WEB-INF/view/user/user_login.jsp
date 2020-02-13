@@ -174,7 +174,7 @@ div.logindiv {
         Kakao.API.request({
           url: '/v2/user/me',
           success: function(res) {
-            //alert(res.properties.nickname+'님 환영합니다.');
+            //alert(res.properties.nickname);
             location.href="/top.do"+res.properties.nickname;
           },
           fail: function(error) {
