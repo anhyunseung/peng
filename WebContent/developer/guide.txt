@@ -4,5 +4,5 @@
 3. Window - preferences - Web - CSS Files / HTML Files / JSP Files - Encoding - UTF-8
 4. Window - preferences - XML - XML Files - Encoding - UTF-8
 
-ps. jsp파일들 UTF-8로 해놓은거 다 UTF-8로 변경
+ps. jsp파일들 euc-kr로 해놓은거 다 UTF-8로 변경
 파일 euckr.jpg 참조

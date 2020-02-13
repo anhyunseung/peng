@@ -17,6 +17,7 @@ if(url.isEmpty()){
 	href="http://localhost:8080/user/user_login.do/../../img/common/icon.ico"
 	type="image/x-icon" />
 <title>로그인 : Lovie</title>
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script type="text/javascript">
 function doOnload(){
 	   var user_id = "<%=SESSION_USER_ID%>";
@@ -28,26 +29,6 @@ function doOnload(){
 	   }
 	   
 	}
-	function doSubmit(a) {
-		if (f.user_id.value == "") {
-			alert("아이디 또는 비밀번호를 입력해주세요.");
-			f.user_id.focus();
-			return false;
-		}
-		if (f.pwd1.value == "") {
-			alert("아이디 또는 비밀번호를 입력해주세요.");
-			f.pwd1.focus();
-			return false;
-		}
-		a.form.submit();
-	}
-	function enterkey(a) {
-        if (window.event.keyCode == 13) {
- 
-             // 엔터키가 눌렸을 때 실행할 내용
-             doSubmit(a);
-        }
-}
 </script>
 <style type="text/css">
 html, body {
@@ -66,7 +47,7 @@ div.logindiv {
 	box-shadow: 2px 2px 2px 0 rgba(100, 100, 100, 0.4);
 	background-color: rgba(255,255,255,0.9);
 	width: 380px;
-	height: 450px;
+	height: 60px;
 	padding: 50px 50px;
 }
 .id:-webkit-autofill {
@@ -78,7 +59,7 @@ div.logindiv {
 	height: 40px;
 	font-size: large;
 	padding: 0 10px 0 10px;
-	margin:40px 0 15px 0;
+	margin:0 0 15px 0;
 	outline-color: #888888;
 }
 .pw{
@@ -97,46 +78,6 @@ div.logindiv {
 	position: relative;
 	left: -6px
 }
-/* 로그인버튼 시작 */
-.button {
-  width:376px;
-  height:52px;
-  text-align: center;
-  text-decoration: none;
-  color:#888888;
-  border: 2px solid #888888;
-  font-size: 24px;
-  display: inline-block;
-  transition: all 0.2s ease-in-out;
-  position: relative;
-  overflow: hidden;
-  background-color: #ffffff;
-  outline:0;
-}
-.button:before {
-  content: "";
-  background-image:url("../img/user/movebt.png");
-  height: 200px;
-  width: 380px;
-  display: block;
-  position: absolute;
-  bottom: -210px;
-  left:1px;
-  -webkit-transform:translateY(0);
-          transform:translateY(0);
-  transition: none;
-  white-space: pre;
-}
-.button:hover {
-  background-color: #888888;
-  color: #fff;
-}
-.button:hover:before {
-  -webkit-transform:translateY(-14.5em);
-          transform:translateY(-14.5em);
-          transition: all 3s ease-in-out;
-}
-/* 로그인버튼 종료 */
 .idf{
 	width:170px;
 	height:35px;
@@ -219,26 +160,34 @@ div.logindiv {
 	<font face='Malgun Gothic' style='line-height: 1.4' />
 	<div class="maindiv" align="center">
 		<div class="logindiv">
-			<a href="/top.do">
-			<img src="../img/user/loginlogo.png">
-			</a>
-			<input type="text" name="user_id" maxlength="20" class="id" onkeyup="enterkey(this);"
-				onkeydown="return doKeyIdPw(event)"placeholder="아이디"/>
-			<input type="password" name="pwd1" maxlength="20" class="pw" onkeyup="enterkey(this);"
-				onkeydown="return doKeyIdPw(event)"placeholder="비밀번호" />
-			<button type="button" onclick="doSubmit(this);" class="button">
-			로그인</button>
-			<div style="margin: 22px 0;background-color: rgb(85, 85, 85, 0.9);height:3px;"></div>
-			<a class="idf" style="cursor: pointer; vertical-align: middle; padding:12px 0 0 0;
-			margin: 0 26px 0 0;" href="/user/user_id_search.do" 
-			onClick="window.open('/user/user_id_search.do','아이디 찾기','width=470, height=226, toolbar=no, menubar=no, scrollbars=no, resizable=yes');return false;">
-			아이디 찾기</a>
-			<a class="pwf" style="cursor: pointer; vertical-align: middle; padding: 12px 0 0 0;
-			margin: 0;" href="/user/user_pw_search.do" 
-			onClick="window.open('/user/user_pw_search.do','비밀번호 찾기','width=470, height=366, toolbar=no, menubar=no, scrollbars=no, resizable=yes');return false;">
-			비밀번호 찾기</a>
-			<a class="button2" style="cursor: pointer; vertical-align: middle; padding: 8px 0 0 0;
-			margin: 15px 0 0 0;" href="/user/user_join.do">회원가입</a>
+		<a id="kakao-login-btn"></a>
+<a href="http://developers.kakao.com/logout"></a>
+<script type='text/javascript'>
+  //<![CDATA[
+    // 사용할 앱의 JavaScript 키를 설정해 주세요.
+    Kakao.init('230526166a00e868a586f374a4f60ddb');
+    // 카카오 로그인 버튼을 생성합니다.
+   Kakao.Auth.createLoginButton({
+      container: '#kakao-login-btn',
+      success: function(authObj) {
+        // 로그인 성공시, API를 호출합니다.
+        Kakao.API.request({
+          url: '/v2/user/me',
+          success: function(res) {
+            //alert(res.properties.nickname+'님 환영합니다.');
+            location.href="/top.do"+res.properties.nickname;
+          },
+          fail: function(error) {
+            alert(JSON.stringify(error));
+          }
+        });
+      },
+      fail: function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  //]]>
+</script>
 		</div>
 	</div>
 </form>
